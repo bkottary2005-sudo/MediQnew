@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare Portal</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font and basic styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc; /* Light background color similar to the image */
+        }
+        /* Custom styles for the rounded, shadowed card */
+        .role-card {
+            transition: all 0.3s ease;
+        }
+        .role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Creative style for dashboard options */
+        .dashboard-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            @apply shadow-lg border border-sky-100;
+        }
+        .dashboard-option:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.3), 0 4px 6px -2px rgba(59, 130, 246, 0.05); /* Blue glow on hover */
+            @apply bg-sky-50;
+        }
+
+        /* Custom 5-column grid for patient dashboard on large screens */
+        @media (min-width: 1024px) {
+            .grid-lg-5 {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-start justify-center pt-16 pb-16">
+
+    <div class="container max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
+
+        <!-- Main Header Section (Always Visible) -->
+        <div class="text-center mb-12">
+            <!-- Central Top Icon -->
+            <div class="inline-flex items-center justify-center p-3 mb-6 rounded-full bg-white shadow-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 2a2 2 0 0 0-2 2v5H4c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h5v5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-5h5c-1.1 0-2-.9-2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2h-2z"/>
+                    <path d="M12 2v5" />
+                    <path d="M17 12h-5" />
+                </svg>
+            </div>
+            
+            <h1 id="main-title" class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">MediCare Portal</h1>
+            <p id="main-subtitle" class="text-lg md:text-xl text-gray-600 font-light">
+                Select your role to access the healthcare system
+            </p>
+        </div>
+
+        <!-- Role Selection Cards Container (Default Screen) -->
+        <div id="role-selection" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Card 1: Patient -->
+            <div class="role-card bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center text-center">
+                <!-- Icon Block -->
+                <div class="w-24 h-24 bg-sky-100 rounded-xl flex items-center justify-center mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Patient</h2>
+                
+                <p class="text-base text-gray-600 mb-8 flex-grow">
+                    Access your medical records, appointments, and test results
+                </p>
+
+                <!-- Button -->
+                <button onclick="showPatientLogin()" class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                    Sign In as Patient
+                </button>
+            </div>
+
+            <!-- Card 2: Doctor -->
+            <div class="role-card bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center text-center">
+                
+                <!-- Icon Block -->
+                <div class="w-24 h-24 bg-sky-100 rounded-xl flex items-center justify-center mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v2M12 20v2M20 12h2M2 12h2M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path d="M12 18v-2M12 8v-2M18 12h-2M8 12H6"/>
+                        <circle cx="12" cy="12" r="10" stroke-dasharray="2 4"/>
+                        <path d="M12 12L15 9M12 12L9 9M12 12L9 15M12 12L15 15"/>
+                    </svg>
+                </div>
+
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Doctor</h2>
+                
+                <p class="text-base text-gray-600 mb-8 flex-grow">
+                    Manage patient consultations, prescriptions, and medical histories
+                </p>
+
+                <!-- Button -->
+                <button onclick="showDoctorDashboard()" class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                    Sign In as Doctor
+                </button>
+            </div>
+
+            <!-- Card 3: Healthcare Worker -->
+            <div class="role-card bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center text-center">
+                
+                <!-- Icon Block (User with Gear) -->
+                <div class="w-24 h-24 bg-sky-100 rounded-xl flex items-center justify-center mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                        <path d="M16 19v-2a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2" />
+                        <path d="M22 22l-1-1" />
+                        <path d="M18 20l-1-1" />
+                        <path d="M20 18l-1-1" />
+                        <path d="M22 18a4 4 0 0 0-4-4v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a4 4 0 0 0 4 4h4" />
+                        <path d="M18 10h4" />
+                        <path d="M20 8v4" />
+                    </svg>
+                </div>
+
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Healthcare Worker</h2>
+                
+                <p class="text-base text-gray-600 mb-8 flex-grow">
+                    Coordinate patient care, schedules, and administrative tasks
+                </p>
+
+                <!-- Button -->
+                <button onclick="showHealthcareWorkerDashboard()" class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                    Sign In as Healthcare Worker
+                </button>
+            </div>
+
+        </div>
+        
+    <!-- Patient Dashboard Wrapper (Now handles login, main options, and details) -->
+        <div id="patient-dashboard" class="hidden">
+            
+            <button onclick="showRoleSelection()" id="patient-back-to-roles" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                Back to Role Selection
+            </button>
+
+            <!-- Patient Login Form -->
+            <div id="patient-login-form" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-2xl border border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Patient Login</h2>
+                
+                <p class="text-sm text-center text-gray-500 mb-4">
+                    Use credentials: user / pass
+                </p>
+
+                <div class="mb-4">
+                    <label for="patient-username" class="block text-sm font-medium text-gray-700 mb-1">Username (user)</label>
+                    <input type="text" id="patient-username" placeholder="Enter username" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                </div>
+
+                <div class="mb-6">
+                    <label for="patient-password" class="block text-sm font-medium text-gray-700 mb-1">Password (pass)</label>
+                    <input type="password" id="patient-password" placeholder="Enter password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                </div>
+
+                <div id="patient-login-error" class="text-red-600 text-sm mb-4 hidden font-medium text-center">
+                    Invalid username or password. Please try again.
+                </div>
+
+                <button onclick="handlePatientLogin()" class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                    Secure Sign In
+                </button>
+            </div>
+
+
+            <!-- Patient Dashboard Options (Hidden until successful login) -->
+            <div id="patient-options" class="hidden">
+                <div class="grid grid-cols-2 md:grid-cols-3 grid-lg-5 gap-6">
+
+                    <!-- Option 1: Hospital Info Section (PURPLE - 1st) -->
+                    <div onclick="showHospitalInfo()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 20v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 22h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h7"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Hospital Info Section</h3>
+                        <p class="text-sm text-gray-500">
+                            Find directions, visiting hours, facility maps, and staff directories.
+                        </p>
+                    </div>
+
+                    <!-- Option 2: Patient Dashboard (RED - 2nd) -->
+                    <div onclick="showPatientMainDashboard()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                <path d="M12 12V6" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Patient Dashboard</h3>
+                        <p class="text-sm text-gray-500">
+                            View lab results, vitals, current medication, and progress charts.
+                        </p>
+                    </div>
+                    
+                    <!-- Option 3: Appointment System (BLUE - 3rd) -->
+                    <div onclick="showAppointmentSystem()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Appointment System</h3>
+                        <p class="text-sm text-gray-500">
+                            Book, reschedule, or cancel appointments with any specialist.
+                        </p>
+                    </div>
+
+                    <!-- Option 4: Billing & Payments (EMERALD - 4th) -->
+                    <div onclick="showBillingDetails()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Billing & Payments</h3>
+                        <p class="text-sm text-gray-500">
+                            Review invoices, insurance claims, and make secure payments.
+                        </p>
+                    </div>
+
+                    <!-- Option 5: Health Education (AMBER - 5th) -->
+                    <div onclick="showHealthEducation()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V5H6.5A2.5 2.5 0 0 0 4 7.5v12z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Health Education</h3>
+                        <p class="text-sm text-gray-500">
+                            Access articles, videos, and guides related to your conditions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Billing and Payments Details (Hidden by Default) -->
+            <div id="patient-billing-details" class="hidden">
+                
+                <button onclick="showPatientOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Patient Dashboard
+                </button>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    
+                    <!-- Detail 1: View Bill Breakdown -->
+                    <div class="dashboard-option bg-white p-8 rounded-xl flex flex-col items-center text-center hover:bg-emerald-50">
+                        <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">View Bill Breakdown</h3>
+                        <p class="text-sm text-gray-500">
+                            Detailed history of services, charges, and insurance coverage.
+                        </p>
+                    </div>
+
+                    <!-- Detail 2: Online Payment -->
+                    <div class="dashboard-option bg-white p-8 rounded-xl flex flex-col items-center text-center hover:bg-emerald-50">
+                        <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="6" width="20" height="12" rx="2" ry="2"/><path d="M6 10h.01"/><path d="M10 10h.01"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">Online Payment</h3>
+                        <p class="text-sm text-gray-500">
+                            Securely pay outstanding balances with card or bank transfer.
+                        </p>
+                    </div>
+
+                    <!-- Detail 3: Download Receipts -->
+                    <div class="dashboard-option bg-white p-8 rounded-xl flex flex-col items-center text-center hover:bg-emerald-50">
+                        <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 15v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">Download Receipts</h3>
+                        <p class="text-sm text-gray-500">
+                            Access and download PDF receipts and payment confirmations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Hospital Info Section Details (Hidden by Default) -->
+            <div id="patient-hospital-info" class="hidden">
+                
+                <button onclick="showPatientOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Patient Dashboard
+                </button>
+                
+                <!-- Layout Grid for Hospital Info -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Column 1: Directions & Map -->
+                    <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Find Us</h3>
+                        
+                        <!-- Map Placeholder -->
+                        <div class="w-full h-64 md:h-80 bg-gray-200 rounded-xl flex items-center justify-center mb-6 border border-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <span class="ml-2 text-gray-600 text-lg font-medium">Map Placeholder</span>
+                        </div>
+                        
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Our Main Campus Address</h4>
+                        <p class="text-gray-600 mb-4">
+                            123 Healthway Drive, MediCare Plaza, Bengaluru, Karnataka 560001
+                        </p>
+                        
+                        <button class="w-full sm:w-auto py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                            Get Directions
+                        </button>
+                    </div>
+
+                    <!-- Column 2: Visiting Hours -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Visiting Hours</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800">General Wards</h4>
+                                <p class="text-gray-600">11:00 AM - 1:00 PM</p>
+                                <p class="text-gray-600">4:00 PM - 7:00 PM</p>
+                            </div>
+                            
+                            <hr class="border-gray-200">
+                            
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800">ICU / Critical Care</h4>
+                                <p class="text-gray-600">By appointment only</p>
+                                <p class="text-gray-600">5:00 PM - 6:00 PM (1 visitor)</p>
+                            </div>
+                            
+                            <hr class="border-gray-200">
+                            
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800">Maternity Ward</h4>
+                                <p class="text-gray-600">10:00 AM - 8:00 PM</p>
+                            </div>
+                            
+                            <hr class="border-gray-200">
+
+                            <div>
+                                <p class="text-sm text-gray-500">
+                                    Please note: Hours may vary by department. Children under 12 may have restrictions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full-Width Row: Nearest Hospitals -->
+                    <div class="lg:col-span-3 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Nearby Partner Facilities</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <!-- Hospital 1 -->
+                            <div class="bg-sky-50 p-6 rounded-xl border border-sky-200 flex items-center space-x-4">
+                                <div class="flex-shrink-0 w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M10 20v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 22h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h7"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-800">MSR Hospitals</h4>
+                                    <p class="text-gray-600">Approx. 5 km away</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Hospital 2 -->
+                            <div class="bg-sky-50 p-6 rounded-xl border border-sky-200 flex items-center space-x-4">
+                                <div class="flex-shrink-0 w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M10 20v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 22h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h7"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-800">Manipal Hospitals</h4>
+                                    <p class="text-gray-600">Approx. 8 km away</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- FIX: Added missing patient-main-dashboard block -->
+            <div id="patient-main-dashboard" class="hidden">
+                <button onclick="showPatientOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Patient Dashboard
+                </button>
+
+                <!-- Layout Grid for Patient Dashboard -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Column 1: Vitals & Medications -->
+                    <div class="lg:col-span-1 space-y-8">
+                        
+                        <!-- Vitals Section -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-red-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                                Vitals
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 font-medium">Blood Pressure</span>
+                                    <span class="font-bold text-gray-900 text-lg">120/80 <span class="text-sm font-normal">mmHg</span></span>
+                                </div>
+                                <hr class="border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 font-medium">Heart Rate</span>
+                                    <span class="font-bold text-gray-900 text-lg">72 <span class="text-sm font-normal">bpm</span></span>
+                                </div>
+                                <hr class="border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 font-medium">Temperature</span>
+                                    <span class="font-bold text-gray-900 text-lg">98.6°F</span>
+                                </div>
+                                <hr class="border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 font-medium">Oxygen Sat.</span>
+                                    <span class="font-bold text-gray-900 text-lg">99%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Current Medications Section -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-blue-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/><path d="m14.3 10.7 1.8-1.8a2 2 0 1 0-2.8-2.8L9.7 9.7"/><path d="m14.3 10.7 4.6 4.6"/><path d="m9.7 9.7-4.6 4.6"/><path d="m9 14 1-1"/><path d="m13 10 1-1"/>
+                                </svg>
+                                Current Medications
+                            </h3>
+                            <div class="space-y-5">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Metformin</h4>
+                                    <p class="text-gray-600">500mg, 2 times a day</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Lisinopril</h4>
+                                    <p class="text-gray-600">10mg, 1 time a day</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Atorvastatin</h4>
+                                    <p class="text-gray-600">20mg, 1 time at night</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Column 2: Lab Results & Charts -->
+                    <div class="lg:col-span-2 space-y-8">
+
+                        <!-- Lab Results Section -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-purple-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>
+                                </svg>
+                                Recent Lab Results
+                            </h3>
+                            <!-- Table for Lab Results -->
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-50 border-b border-gray-200">
+                                        <tr>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Test Name</th>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Result</th>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Range</th>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="py-4 px-4 text-gray-800">Cholesterol</td>
+                                            <td class="py-4 px-4 font-bold text-red-600">190 mg/dL</td>
+                                            <td class="py-4 px-4 text-gray-600">&lt;150 mg/dL</td>
+                                            <td class="py-4 px-4 text-gray-600">10-Nov-2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-4 px-4 text-gray-800">Glucose</td>
+                                            <td class="py-4 px-4 font-bold text-gray-900">95 mg/dL</td>
+                                            <td class="py-4 px-4 text-gray-600">70-100 mg/dL</td>
+                                            <td class="py-4 px-4 text-gray-600">10-Nov-2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-4 px-4 text-gray-800">Hemoglobin A1c</td>
+                                            <td class="py-4 px-4 font-bold text-gray-900">5.5%</td>
+                                            <td class="py-4 px-4 text-gray-600">4.0% - 5.6%</td>
+                                            <td class="py-4 px-4 text-gray-600">10-Nov-2025</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Progress Charts Section -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-emerald-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 3v18h18"/><path d="m18 17-5-5-4 4-3-3"/>
+                                </svg>
+                                Progress Charts
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Chart Placeholder 1 -->
+                                <div class="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                                    <span class="text-gray-500 font-medium">Blood Pressure Chart Placeholder</span>
+                                </div>
+                                <!-- Chart Placeholder 2 -->
+                                <div class="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                                    <span class="text-gray-500 font-medium">Weight Trend Placeholder</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- FIX: Added missing patient-appointment-system block -->
+            <div id="patient-appointment-system" class="hidden">
+                <button onclick="showPatientOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Patient Dashboard
+                </button>
+
+                <!-- Layout Grid for Appointment System -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Column 1: Book Appointment Form -->
+                    <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Book a New Appointment</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Select Specialist -->
+                            <div class="md:col-span-2">
+                                <label for="specialist" class="block text-sm font-medium text-gray-700 mb-1">Specialist</label>
+                                <select id="specialist" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                                    <option>Select a department...</option>
+                                    <option>Cardiology (Dr. Smith)</option>
+                                    <option>Dermatology (Dr. Allen)</option>
+                                    <option>Orthopedics (Dr. Lee)</option>
+                                    <option>General Practice (Dr. Patel)</option>
+                                </select>
+                            </div>
+
+                            <!-- Select Date -->
+                            <div>
+                                <label for="app-date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                                <input type="date" id="app-date" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                            </div>
+
+                            <!-- Select Time -->
+                            <div>
+                                <label for="app-time" class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                                <select id="app-time" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                                    <option>Select a time slot...</option>
+                                    <option>09:00 AM</option>
+                                    <option>10:30 AM</option>
+                                    <option>02:00 PM</option>
+                                    <option>04:30 PM</option>
+                                </select>
+                            </div>
+
+                            <!-- Reason for Visit -->
+                            <div class="md:col-span-2">
+                                <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Reason for Visit (Optional)</label>
+                                <textarea id="reason" rows="3" placeholder="e.g., Annual check-up, new symptom..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150"></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <button class="w-full mt-6 py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                            Request Appointment
+                        </button>
+                    </div>
+
+                    <!-- Column 2: Upcoming Appointments -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Upcoming</h3>
+                        
+                        <div class="space-y-5">
+                            <!-- Appointment 1 -->
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800">Cardiology Check-up</h4>
+                                <p class="text-gray-600">Dr. Smith</p>
+                                <p class="text-sm text-gray-500 mt-1">15th Nov 2025, 10:30 AM</p>
+                                <div class="mt-3 flex space-x-2">
+                                    <button class_unused="w-full py-2 px-3 rounded-lg text-white font-medium bg-blue-500 hover:bg-blue-600 text-sm transition">Reschedule</button>
+                                    <button class_unused="w-full py-2 px-3 rounded-lg text-white font-medium bg-red-500 hover:bg-red-600 text-sm transition">Cancel</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Appointment 2 -->
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800">Dermatology Follow-up</h4>
+                                <p class="text-gray-600">Dr. Allen</p>
+                                <p class="text-sm text-gray-500 mt-1">22nd Nov 2025, 02:00 PM</p>
+                                <div class="mt-3 flex space-x-2">
+                                    <button class_unused="w-full py-2 px-3 rounded-lg text-white font-medium bg-blue-500 hover:bg-blue-600 text-sm transition">Reschedule</button>
+                                    <button class_unused="w-full py-2 px-3 rounded-lg text-white font-medium bg-red-500 hover:bg-red-600 text-sm transition">Cancel</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- NEW: Health Education Details (Hidden by Default) -->
+            <div id="patient-health-education" class="hidden">
+                <button onclick="showPatientOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Patient Dashboard
+                </button>
+
+                <div class="space-y-12">
+
+                    <!-- Section 1: Featured Articles -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Featured Articles</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            
+                            <!-- Article Card 1 -->
+                            <div class="dashboard-option bg-white rounded-2xl overflow-hidden hover:bg-amber-50">
+                                <!-- Image Placeholder -->
+                                <div class="w-full h-40 bg-gray-200 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">Understanding Blood Pressure</h4>
+                                    <p class="text-sm text-gray-600 mb-4">Learn what the numbers mean and how to manage your health.</p>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800">Read More &rarr;</span>
+                                </div>
+                            </div>
+
+                            <!-- Article Card 2 -->
+                            <div class="dashboard-option bg-white rounded-2xl overflow-hidden hover:bg-amber-50">
+                                <!-- Image Placeholder -->
+                                <div class="w-full h-40 bg-gray-200 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">Eating for a Healthy Heart</h4>
+                                    <p class="text-sm text-gray-600 mb-4">Simple dietary changes that can make a big difference.</p>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800">Read More &rarr;</span>
+                                </div>
+                            </div>
+
+                            <!-- Article Card 3 -->
+                            <div class="dashboard-option bg-white rounded-2xl overflow-hidden hover:bg-amber-50">
+                                <!-- Image Placeholder -->
+                                <div class="w-full h-40 bg-gray-200 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">The Importance of Sleep</h4>
+                                    <p class="text-sm text-gray-600 mb-4">Why 8 hours isn't just a myth. Explore the science of sleep.</p>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800">Read More &rarr;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Educational Videos -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Educational Videos</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            
+                            <!-- Video Card 1 -->
+                            <div class="dashboard-option bg-white rounded-2xl overflow-hidden hover:bg-amber-50">
+                                <!-- Video Placeholder -->
+                                <div class="w-full h-40 bg-gray-800 flex items-center justify-center relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-white opacity-70" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">Stretching for Beginners</h4>
+                                    <p class="text-sm text-gray-600 mb-4">A 5-minute daily routine to improve flexibility and reduce pain.</p>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800">Watch Video &rarr;</span>
+                                </div>
+                            </div>
+
+                            <!-- Video Card 2 -->
+                            <div class="dashboard-option bg-white rounded-2xl overflow-hidden hover:bg-amber-50">
+                                <!-- Video Placeholder -->
+                                <div class="w-full h-40 bg-gray-800 flex items-center justify-center relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-white opacity-70" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">How to Use Your Inhaler</h4>
+                                    <p class="text-sm text-gray-600 mb-4">A step-by-step guide to proper technique and maintenance.</p>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800">Watch Video &rarr;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Quick Guides -->
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Quick Guides (PDF)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            
+                            <!-- Guide Card 1 -->
+                            <div class="dashboard-option bg-white p-5 rounded-2xl flex items-center space-x-4 hover:bg-amber-50">
+                                <div class="flex-shrink-0 w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Post-Op Care</h4>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800 text-sm">Download</span>
+                                </div>
+                            </div>
+
+                            <!-- Guide Card 2 -->
+                            <div class="dashboard-option bg-white p-5 rounded-2xl flex items-center space-x-4 hover:bg-amber-50">
+                                <div class="flex-shrink-0 w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Diabetes Diet</h4>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800 text-sm">Download</span>
+                                </div>
+                            </div>
+
+                            <!-- Guide Card 3 -->
+                            <div class="dashboard-option bg-white p-5 rounded-2xl flex items-center space-x-4 hover:bg-amber-50">
+                                <div class="flex-shrink-0 w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Allergy Guide</h4>
+                                    <span class="font-medium text-sky-600 hover:text-sky-800 text-sm">Download</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+        
+        <!-- Doctor Dashboard (Wrapper) -->
+        <div id="doctor-dashboard" class="hidden">
+            
+            <button onclick="showRoleSelection()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                Back to Role Selection
+            </button>
+
+            <!-- Doctor Main Options -->
+            <div id="doctor-options" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Option 1: Patient Information -->
+                <div onclick="showDoctorPatientInfo()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-indigo-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6"/><path d="M12 18v-6"/><circle cx="12" cy="7" r="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Patient Information</h3>
+                    <p class="text-sm text-gray-500">
+                        Securely access full medical history, lab results, and patient records.
+                    </p>
+                </div>
+
+                <!-- Option 2: Appointment & Queue Management -->
+                <div onclick="showDoctorApptQueue()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                            <path d="M10 12h.01"/><path d="M14 12h.01"/><path d="M18 12h.01"/><path d="M6 16h.01"/><path d="M10 16h.01"/><path d="M14 16h.01"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Appointment & Queue Management</h3>
+                    <p class="text-sm text-gray-500">
+                        View waiting lists, manage schedule conflicts, and check-in patients.
+                    </p>
+                </div>
+
+                <!-- Option 3: Communication Tools (FIXED: Added onclick) -->
+                <div onclick="showDoctorCommTools()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Communication Tools</h3>
+                    <p class="text-sm text-gray-500">
+                        Send prescriptions and consult with nurses and specialists securely.
+                    </p>
+                </div>
+
+                <!-- Option 4: Dashboard Overview -->
+                <div onclick="showDoctorDashboardOverview()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"/><path d="M18 17l-5-5-4 4L2 11"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Dashboard Overview</h3>
+                    <p class="text-sm text-gray-500">
+                        Monitor key performance indicators and facility metrics in real-time.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Doctor - Patient Information Details (Hidden by Default) -->
+            <div id="doctor-patient-info" class="hidden">
+                <button onclick="showDoctorOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Doctor Dashboard
+                </button>
+
+                <!-- Layout Grid for Patient Info -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Column 1: Patient Profile Card -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 self-start">
+                        <!-- Patient Avatar & Name -->
+                        <div class="text-center mb-6">
+                            <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900">John A. Doe</h3>
+                            <p class="text-gray-600">Patient ID: P-73519</p>
+                        </div>
+                        
+                        <!-- Patient Details -->
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">DOB</span>
+                                <span class="font-semibold text-gray-900">14-Mar-1985</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Gender</span>
+                                <span class="font-semibold text-gray-900">Male</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 font-medium">Blood Type</span>
+                                <span class="font-semibold text-gray-900">O+</span>
+                            </div>
+                        </div>
+
+                        <!-- Key Info -->
+                        <hr class="border-gray-200 my-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800 mb-3">Key Information</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <h5 class="text-sm font-semibold text-gray-700">Allergies</h5>
+                                    <p class="text-red-600 font-medium">Penicillin, Shellfish</p>
+                                </div>
+                                <div>
+                                    <h5 class="text-sm font-semibold text-gray-700">Chronic Conditions</h5>
+                                    <p class="text-gray-800 font-medium">Hypertension, Type 2 Diabetes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Medical File (History, Labs, Records) -->
+                    <div class="lg:col-span-2 space-y-8">
+
+                        <!-- Medical History Section -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Medical History</h3>
+                            <ul class="space-y-4">
+                                <li class="border-l-4 border-indigo-500 pl-4">
+                                    <span class="text-sm font-medium text-gray-500">10-Nov-2025</span>
+                                    <h4 class="font-semibold text-gray-800">Admitted for Observation</h4>
+                                    <p class="text-gray-600">Complaints of chest pain; EKG normal. Ruled out MI. - Dr. Smith</p>
+                                </li>
+                                <li class="border-l-4 border-gray-300 pl-4">
+                                    <span class="text-sm font-medium text-gray-500">05-Jun-2025</span>
+                                    <h4 class="font-semibold text-gray-800">Annual Check-up</h4>
+                                    <p class="text-gray-600">Vitals stable. A1c at 5.5%. BP 125/85. - Dr. Patel</p>
+                                </li>
+                                <li class="border-l-4 border-gray-300 pl-4">
+                                    <span class="text-sm font-medium text-gray-500">15-Jan-2024</span>
+                                    <h4 class="font-semibold text-gray-800">Appendectomy</h4>
+                                    <p class="text-gray-600">Successful laparoscopic appendectomy. No complications. - Dr. Lee</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Lab Results Section -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Recent Lab Results</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-50 border-b border-gray-200">
+                                        <tr>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Test Name</th>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Result</th>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Flag</th>
+                                            <th class="py-3 px-4 font-semibold text-gray-700">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="py-4 px-4 text-gray-800">Cholesterol</td>
+                                            <td class="py-4 px-4 font-bold text-gray-900">190 mg/dL</td>
+                                            <td class="py-4 px-4"><span class="text-xs font-bold text-white bg-red-500 px-2 py-1 rounded-full">HIGH</span></td>
+                                            <td class="py-4 px-4 text-gray-600">10-Nov-2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-4 px-4 text-gray-800">Hemoglobin A1c</td>
+                                            <td class="py-4 px-4 font-bold text-gray-900">5.5%</td>
+                                            <td class="py-4 px-4"><span class="text-xs font-bold text-white bg-green-500 px-2 py-1 rounded-full">NORMAL</span></td>
+                                            <td class="py-4 px-4 text-gray-600">10-Nov-2025</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Patient Records Section -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Patient Records & Scans</h3>
+                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                        <div>
+                                            <h5 class="font-semibold text-gray-800">MRI_Brain_Scan_Oct-2025.pdf</h5>
+                                            <span class="text-sm text-gray-500">Uploaded 18-Oct-2025</span>
+                                        </div>
+                                    </div>
+                                    <button class="text-sky-600 hover:text-sky-800 font-medium text-sm">Download</button>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                        <div>
+                                            <h5 class="font-semibold text-gray-800">EKG_Report_Nov-2025.pdf</h5>
+                                            <span class="text-sm text-gray-500">Uploaded 10-Nov-2025</span>
+                                        </div>
+                                    </div>
+                                    <button class="text-sky-600 hover:text-sky-800 font-medium text-sm">Download</button>
+                                </div>
+                             </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor - Dashboard Overview Details (Hidden by Default) -->
+            <div id="doctor-dashboard-overview" class="hidden">
+                <button onclick="showDoctorOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Doctor Dashboard
+                </button>
+
+                <!-- 4-Card KPI Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    
+                    <!-- KPI Card 1: Bed Occupancy -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase">Bed Occupancy</h4>
+                                <p class="text-4xl font-extrabold text-gray-900 mt-2">85%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343m11.314 11.314a8 8 0 00-11.314-11.314m11.314 11.314L6.343 7.343" /><path d="M12 18a6 6 0 100-12 6 6 0 000 12z" stroke-width="1.5" /></svg>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-red-500 h-2.5 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Card 2: Avg. Wait Time -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase">Avg. Wait Time (ER)</h4>
+                                <p class="text-4xl font-extrabold text-gray-900 mt-2">22<span class="text-3xl font-bold"> min</span></p>
+                            </div>
+                            <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                        </div>
+                         <div class="flex items-center text-sm text-green-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 17l-4-4l-4 4m-4-4l4-4l4 4" /></svg>
+                            <span>2 min</span>
+                            <span class="text-gray-500 ml-1"> from yesterday</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI Card 3: Admissions Today -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase">Admissions (24h)</h4>
+                                <p class="text-4xl font-extrabold text-gray-900 mt-2">41</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                            </div>
+                        </div>
+                         <div class="flex items-center text-sm text-green-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                            <span>+3</span>
+                            <span class="text-gray-500 ml-1"> from 8h ago</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI Card 4: Surgeries Scheduled -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase">Surgeries Today</h4>
+                                <p class="text-4xl font-extrabold text-gray-900 mt-2">12</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12 12 0 0012 21.41z" /></svg>
+                            </div>
+                        </div>
+                         <div class="flex items-center text-sm text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                            <span>4 waiting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Chart Placeholder -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Patient Admissions (Last 7 Days)</h3>
+                    <div class="w-full h-80 bg-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                        <span class="text-gray-500 font-medium">Chart Placeholder</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Doctor - Appointment & Queue Management (Hidden by Default) -->
+            <div id="doctor-appointment-queue" class="hidden">
+                <button onclick="showDoctorOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Doctor Dashboard
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Col 1: Waiting List -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Waiting List (Live)</h3>
+                        <div class="space-y-4">
+                            <!-- Patient 1 -->
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800">Sarah Jenkins</h4>
+                                <p class="text-gray-600">Status: <span class="font-medium text-green-600">Waiting (10 min)</span></p>
+                                <p class="text-sm text-gray-500 mt-1">Reason: Follow-up</p>
+                            </div>
+                            <!-- Patient 2 -->
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800">Michael B.</h4>
+                                <p class="text-gray-600">Status: <span class="font-medium text-green-600">Waiting (5 min)</span></p>
+                                <p class="text-sm text-gray-500 mt-1">Reason: New Symptom</p>
+                            </div>
+                             <!-- Patient 3 -->
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                <h4 class="font-bold text-gray-800">David Chen</h4>
+                                <p class="text-gray-600">Status: <span class="font-medium text-green-600">Waiting (2 min)</span></p>
+                                <p class="text-sm text-gray-500 mt-1">Reason: Prescription Refill</p>
+                            </div>
+                            <button class="w-full mt-4 py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                                Call Next Patient
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Col 2: Patient Check-in -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Patient Check-In</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="checkin-id" class="block text-sm font-medium text-gray-700 mb-1">Patient ID or Name</label>
+                                <input type="text" id="checkin-id" placeholder="e.g., P-73519 or John Doe" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            </div>
+                            <button class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-emerald-600 hover:bg-emerald-700 transition duration-300 shadow-md">
+                                Check In Patient
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Col 3: Schedule Conflicts -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Schedule Conflicts</h3>
+                        <div class="space-y-4">
+                            <!-- Conflict 1 -->
+                            <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                                <h4 class="font-semibold text-red-800">Double Booking: 10:30 AM</h4>
+                                <p class="text-sm text-red-700">J. Doe (P-73519)</p>
+                                <p class="text-sm text-red-700">A. Smith (P-88210)</p>
+                                <button class="mt-2 py-2 px-3 rounded-lg text-white font-medium bg-red-500 hover:bg-red-600 text-sm transition">
+                                    Resolve
+                                </button>
+                            </div>
+                            <!-- No conflicts placeholder -->
+                             <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-center">
+                                <p class="font-medium text-green-800">No schedule conflicts detected.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Doctor - Communication Tools (Hidden by Default) -->
+            <div id="doctor-comm-tools" class="hidden">
+                <button onclick="showDoctorOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Doctor Dashboard
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Column 1: Secure Messaging -->
+                    <div class="lg:col-span-1 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Secure Consults</h3>
+                        </div>
+                        <!-- Contact List -->
+                        <div class="border-t border-gray-200 flex-grow">
+                            <h4 class="font-semibold text-gray-700 p-4 bg-gray-50 text-sm border-b border-gray-200">Staff Directory</h4>
+                            <!-- User List -->
+                            <div class="h-96 overflow-y-auto">
+                                <!-- Contact 1 -->
+                                <div class="p-4 flex items-center space-x-3 border-b border-gray-100 hover:bg-sky-50 cursor-pointer">
+                                    <span class="w-10 h-10 bg-teal-100 text-teal-700 font-semibold rounded-full flex items-center justify-center text-sm">SL</span>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-800">Dr. Susan Lee</h5>
+                                        <p class="text-sm text-gray-500">Cardiology</p>
+                                    </div>
+                                </div>
+                                <!-- Contact 2 (Active Example) -->
+                                <div class="p-4 flex items-center space-x-3 border-b border-gray-100 hover:bg-sky-50 cursor-pointer bg-sky-50 border-l-4 border-sky-500">
+                                     <span class="w-10 h-10 bg-blue-100 text-blue-700 font-semibold rounded-full flex items-center justify-center text-sm">MP</span>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-800">Mark Patel</h5>
+                                        <p class="text-sm text-gray-500">Head Nurse (ICU)</p>
+                                    </div>
+                                </div>
+                                <!-- Contact 3 -->
+                                <div class="p-4 flex items-center space-x-3 border-b border-gray-100 hover:bg-sky-50 cursor-pointer">
+                                     <span class="w-10 h-10 bg-gray-200 text-gray-600 font-semibold rounded-full flex items-center justify-center text-sm">RN</span>
+                                    <div>
+                                        <h5 class="font-semibold text-gray-800">RN Station (Floor 3)</h5>
+                                        <p class="text-sm text-gray-500">Group Chat</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Chat Input -->
+                        <div class="p-4 bg-gray-50 border-t border-gray-200">
+                            <textarea rows="2" placeholder="Start a secure message..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                            <button class="w-full mt-2 py-2 px-4 rounded-lg text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300">Send</button>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Send Prescription -->
+                    <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 self-start">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-teal-500 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>
+                            </svg>
+                            Send New Prescription
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <!-- Patient Search -->
+                            <div>
+                                <label for="rx-patient" class="block text-sm font-medium text-gray-700 mb-1">Patient</label>
+                                <input type="text" id="rx-patient" placeholder="Search by Patient Name or ID (e.g., John Doe, P-73519)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150" value="John A. Doe (P-73519)">
+                            </div>
+
+                            <!-- Medication Search -->
+                            <div>
+                                <label for="rx-med" class="block text-sm font-medium text-gray-700 mb-1">Medication</label>
+                                <select id="rx-med" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                                    <option>Select medication...</option>
+                                    <option>Metformin (500mg)</option>
+                                    <option>Lisinopril (10mg)</option>
+                                    <option>Atorvastatin (20mg)</option>
+                                    <option>Amoxicillin (250mg)</option>
+                                </select>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                 <!-- Dosage -->
+                                <div>
+                                    <label for="rx-dosage" class="block text-sm font-medium text-gray-700 mb-1">Dosage & Frequency</label>
+                                    <input type="text" id="rx-dosage" placeholder="e.g., 1 tablet, 2 times a day" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                                </div>
+                                <!-- Quantity -->
+                                <div>
+                                    <label for="rx-qty" class="block text-sm font-medium text-gray-700 mb-1">Quantity / Duration</label>
+                                    <input type="text" id="rx-qty" placeholder="e.g., 30 tablets" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div>
+                                <label for="rx-notes" class="block text-sm font-medium text-gray-700 mb-1">Notes for Pharmacist (Optional)</label>
+                                <textarea id="rx-notes" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150"></textarea>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <button class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-teal-600 hover:bg-teal-700 transition duration-300 shadow-md">
+                                Send Secure Prescription
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Healthcare Worker Dashboard (Wrapper) -->
+        <div id="hw-dashboard" class="hidden">
+            
+            <button onclick="showRoleSelection()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                Back to Role Selection
+            </button>
+
+            <!-- HW Main Options Grid -->
+            <div id="hw-options">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                    <!-- Option 1: Live Navigation & Route Support -->
+                    <div onclick="showNavigationDetails()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-sky-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polygon points="10 8 16 12 10 16 10 8" fill="white" stroke="white" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Live Navigation & Route Support</h3>
+                        <p class="text-sm text-gray-500">
+                            Optimize travel time to patient homes or facility locations.
+                        </p>
+                    </div>
+
+                    <!-- Option 2: Communication Tools (FIXED: Added onclick) -->
+                    <div onclick="showHwCommTools()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Communication Tools</h3>
+                        <p class="text-sm text-gray-500">
+                            Secure messaging with doctors, nurses, and patient families.
+                        </p>
+                    </div>
+
+                    <!-- Option 3: Appointment Management (FIXED: Added onclick) -->
+                    <div onclick="showHwApptMgmt()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Appointment Management</h3>
+                        <p class="text-sm text-gray-500">
+                            View, reschedule, and document patient visit details and tasks.
+                        </p>
+                    </div>
+
+                    <!-- Option 4: Patient Monitoring (FIXED: Added onclick) -->
+                    <div onclick="showHwPatientMonitoring()" class="dashboard-option bg-white p-6 rounded-xl flex flex-col items-center text-center">
+                        <div class="w-16 h-16 bg-rose-500 rounded-full flex items-center justify-center mb-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                <path d="M12 12V6" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Patient Monitoring</h3>
+                        <p class="text-sm text-gray-500">
+                            Record vitals, log treatment, and view historical health data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HW Live Navigation Details (Hidden by Default) -->
+            <div id="hw-navigation-details" class="hidden">
+                <button onclick="showHealthcareWorkerOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Healthcare Worker Dashboard
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    <!-- Column 1: Map Placeholder -->
+                    <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Real-Time Map</h3>
+                        
+                        <!-- Map Placeholder -->
+                        <div class="w-full h-96 bg-gray-200 rounded-xl flex items-center justify-center border border-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <span class="ml-2 text-gray-600 text-lg font-medium">Live Map Placeholder</span>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Route & Ambulance Details -->
+                    <div class="lg:col-span-1 space-y-8">
+                        
+                        <!-- Optimized Route -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Optimized Route</h3>
+                            <div class="space-y-3">
+                                <p class="text-gray-600">Next Stop: <span class="font-semibold text-gray-900">123 Patient St.</span></p>
+                                <p class="text-gray-600">ETA: <span class="font-semibold text-green-600">12 minutes</span></p>
+                                <p class="text-gray-600">Distance: <span class="font-semibold text-gray-900">3.4 km</span></p>
+                                <p class="text-gray-600">Traffic: <span class="font-semibold text-amber-600">Moderate</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Ambulance Navigation Details -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Ambulance Details</h3>
+                            <div class="space-y-3">
+                                <p class="text-gray-600">Vehicle ID: <span class="font-semibold text-gray-900">AMB-07</span></p>
+                                <p class="text-gray-600">Status: <span class="font-semibold text-blue-600">En Route to Patient</span></p>
+                                <p class="text-gray-600">Case Priority: <span class="font-semibold text-red-600">High (Code 3)</span></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- HW Communication Tools (Hidden by Default) -->
+            <div id="hw-comm-tools" class="hidden">
+                <button onclick="showHealthcareWorkerOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Healthcare Worker Dashboard
+                </button>
+
+                <!-- Layout Grid for Comm Tools -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Column 1: Contact List -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 self-start">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Contacts</h3>
+                        <div class="space-y-4">
+                            <!-- Section: Doctors -->
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">Doctors</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
+                                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center"><span class="font-semibold text-indigo-700">DS</span></div>
+                                        <div>
+                                            <p class="font-semibold text-gray-800">Dr. Smith</p>
+                                            <p class="text-sm text-green-600">Online</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
+                                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center"><span class="font-semibold text-indigo-700">AL</span></div>
+                                        <div>
+                                            <p class="font-semibold text-gray-800">Dr. Allen</p>
+                                            <p class="text-sm text-gray-500">Offline</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Section: Nurses -->
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">Nurses</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"><span class="font-semibold text-blue-700">RN</span></div>
+                                        <div>
+                                            <p class="font-semibold text-gray-800">RN Station (Floor 3)</p>
+                                            <p class="text-sm text-green-600">Online</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Section: Patient Families -->
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-500 uppercase mb-2">Patient Families</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
+                                        <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center"><span class="font-semibold text-gray-700">JD</span></div>
+                                        <div>
+                                            <p class="font-semibold text-gray-800">Family of John Doe</p>
+                                            <p class="text-sm text-gray-500">Offline</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Chat Window -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col" style="height: 600px;">
+                        <!-- Chat Header -->
+                        <div class="p-4 border-b border-gray-200">
+                            <h3 class="text-xl font-bold text-gray-900">Dr. Smith</h3>
+                            <p class="text-sm text-green-600">Online</p>
+                        </div>
+                        
+                        <!-- Chat Area Placeholder -->
+                        <div class="flex-grow p-6 bg-gray-100 space-y-4 overflow-y-auto">
+                            <!-- Message (Them) -->
+                            <div class="flex justify-start">
+                                <div class="p-4 bg-white rounded-xl shadow-sm max-w-lg">
+                                    <p class="text-sm text-gray-700">Hi, can you confirm if John Doe (P-73519) has been scheduled for his follow-up?</p>
+                                </div>
+                            </div>
+                            <!-- Message (You) -->
+                            <div class="flex justify-end">
+                                <div class="p-4 bg-sky-500 text-white rounded-xl shadow-sm max-w-lg">
+                                    <p class="text-sm">Yes, Dr. Smith. He is confirmed for 15th Nov at 10:30 AM.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="p-4 bg-white border-t border-gray-200">
+                            <div class="flex space-x-3">
+                                <input type="text" placeholder="Type your secure message..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                                <button class="py-3 px-5 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HW Appointment Management (Hidden by Default) -->
+            <div id="hw-appointment-mgmt" class="hidden">
+                <button onclick="showHealthcareWorkerOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Healthcare Worker Dashboard
+                </button>
+
+                <!-- Layout Grid for Appointment Management -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Column 1: Today's Schedule -->
+                    <div class="lg:col-span-1 bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 self-start">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Today's Schedule</h3>
+                        <div class="space-y-4">
+                            <!-- Patient 1 (Active Example) -->
+                            <div class="bg-sky-50 p-4 rounded-xl border-2 border-sky-500">
+                                <h4 class="font-bold text-gray-800">Jane R. (Room 302A)</h4>
+                                <p class="text-gray-600">10:00 AM - Vitals Check</p>
+                                <div class="mt-3 flex space-x-2">
+                                    <button class="w-full py-2 px-3 rounded-lg text-white font-medium bg-sky-600 hover:bg-sky-700 text-sm transition">View Details</button>
+                                    <button class="w-full py-2 px-3 rounded-lg text-gray-700 font-medium bg-gray-200 hover:bg-gray-300 text-sm transition">Reschedule</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Patient 2 -->
+                            <div class="bg-gray-50 p-4 rounded-xl border-2 border-transparent hover:border-gray-300">
+                                <h4 class="font-bold text-gray-800">Michael B. (Room 304B)</h4>
+                                <p class="text-gray-600">10:30 AM - Medication</p>
+                                <div class="mt-3 flex space-x-2">
+                                    <button class="w-full py-2 px-3 rounded-lg text-white font-medium bg-sky-600 hover:bg-sky-700 text-sm transition">View Details</button>
+                                    <button class="w-full py-2 px-3 rounded-lg text-gray-700 font-medium bg-gray-200 hover:bg-gray-300 text-sm transition">Reschedule</button>
+                                </div>
+                            </div>
+
+                            <!-- Patient 3 -->
+                            <div class="bg-gray-50 p-4 rounded-xl border-2 border-transparent hover:border-gray-300">
+                                <h4 class="font-bold text-gray-800">David Chen (Room 305A)</h4>
+                                <p class="text-gray-600">11:00 AM - Discharge Prep</p>
+                                <div class="mt-3 flex space-x-2">
+                                    <button class="w-full py-2 px-3 rounded-lg text-white font-medium bg-sky-600 hover:bg-sky-700 text-sm transition">View Details</button>
+                                    <button class="w-full py-2 px-3 rounded-lg text-gray-700 font-medium bg-gray-200 hover:bg-gray-300 text-sm transition">Reschedule</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Patient Details & Documentation -->
+                    <div class="lg:col-span-2 space-y-8">
+                        
+                        <!-- Patient Details Card -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Patient Details</h3>
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-2xl font-bold text-blue-700">JR</span>
+                                </div>
+                                <div>
+                                   <h4 class="text-xl font-bold text-gray-900">Jane R. (Room 302A)</h4>
+                                   <p class="text-gray-600">Patient ID: P-12345</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                                <div class="flex justify-between border-b py-2"><span class="text-gray-500">DOB:</span><span class="font-semibold text-gray-800">22-May-1950</span></div>
+                                <div class="flex justify-between border-b py-2"><span class="text-gray-500">Gender:</span><span class="font-semibold text-gray-800">Female</span></div>
+                                <div class="flex justify-between border-b py-2"><span class="text-gray-500">Allergies:</span><span class="font-semibold text-red-600">None Reported</span></div>
+                                <div class="flex justify-between border-b py-2"><span class="text-gray-500">Condition:</span><span class="font-semibold text-gray-800">Post-Op (Knee)</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Visit Documentation -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Visit Documentation (10:00 AM)</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label for="visit-notes" class="block text-sm font-medium text-gray-700 mb-1">Visit Notes</label>
+                                    <textarea id="visit-notes" rows="4" placeholder="Patient is alert, reports low pain. Incision site is clean..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150"></textarea>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-700 mb-3">Tasks for this Visit</h4>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                            <input type="checkbox" class="h-5 w-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 mr-3">
+                                            <span class="text-gray-800">Record Vitals (BP, Temp, O2)</span>
+                                        </label>
+                                        <label class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                            <input type="checkbox" class="h-5 w-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 mr-3">
+                                            <span class="text-gray-800">Check Incision Site</span>
+                                        </label>
+                                        <label class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                            <input type="checkbox" class="h-5 w-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 mr-3">
+                                            <span class="text-gray-800">Assist with Morning Mobility</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <button class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-emerald-600 hover:bg-emerald-700 transition duration-300 shadow-md">
+                                    Mark Visit as Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- NEW: HW Patient Monitoring (Hidden by Default) -->
+            <div id="hw-patient-monitoring" class="hidden">
+                <button onclick="showHealthcareWorkerOptions()" class="mb-8 inline-flex items-center text-sky-600 hover:text-sky-800 font-medium transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                    Back to Healthcare Worker Dashboard
+                </button>
+                
+                <!-- Layout Grid for Patient Monitoring -->
+                <div class="space-y-8">
+                    
+                    <!-- Patient Selector -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                        <label for="monitor-patient-hw" class="block text-xl font-bold text-gray-900 mb-3">Select Patient to Monitor</label>
+                        <select id="monitor-patient-hw" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition duration-150">
+                            <option value="p1">Jane R. (Room 302A)</option>
+                            <option value="p2">Michael B. (Room 304B)</option>
+                            <option value="p3">David Chen (Room 305A)</option>
+                        </select>
+                    </div>
+
+                    <!-- NEW: Key Information -->
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Key Information (Jane R.)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700">Allergies</h4>
+                                <p class="text-red-600 font-medium">Penicillin</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700">Chronic Conditions</h4>
+                                <p class="text-gray-800 font-medium">Hypertension</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700">Code Status</h4>
+                                <p class="text-gray-800 font-medium">Full Code</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700">Attending</h4>
+                                <p class="text-gray-800 font-medium">Dr. Smith</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        
+                        <!-- Column 1: Record Vitals & Log Treatment -->
+                        <div class="space-y-8">
+                            <!-- Record Vitals Form -->
+                            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-6">Record New Vitals</h3>
+                                <div class="grid grid-cols-2 gap-x-4 gap-y-5">
+                                    <div>
+                                        <label for="vital-bp-hw" class="block text-sm font-medium text-gray-700 mb-1">Blood Pressure</label>
+                                        <input type="text" id="vital-bp-hw" placeholder="e.g., 120/80" class="w-full p-3 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label for="vital-hr-hw" class="block text-sm font-medium text-gray-700 mb-1">Heart Rate (bpm)</label>
+                                        <input type="text" id="vital-hr-hw" placeholder="e.g., 72" class="w-full p-3 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label for="vital-temp-hw" class="block text-sm font-medium text-gray-700 mb-1">Temp (°F)</label>
+                                        <input type="text" id="vital-temp-hw" placeholder="e.g., 98.6" class="w-full p-3 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label for="vital-o2-hw" class="block text-sm font-medium text-gray-700 mb-1">Oxygen Sat. (%)</label>
+                                        <input type="text" id="vital-o2-hw" placeholder="e.g., 99" class="w-full p-3 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <!-- NEW FIELD: Respiratory Rate -->
+                                    <div>
+                                        <label for="vital-resp-hw" class="block text-sm font-medium text-gray-700 mb-1">Resp. Rate (bpm)</label>
+                                        <input type="text" id="vital-resp-hw" placeholder="e.g., 16" class="w-full p-3 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <!-- NEW FIELD: Glucose -->
+                                    <div>
+                                        <label for="vital-glucose-hw" class="block text-sm font-medium text-gray-700 mb-1">Glucose (mg/dL)</label>
+                                        <input type="text" id="vital-glucose-hw" placeholder="e.g., 95" class="w-full p-3 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <div class="col-span-2">
+                                        <button class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-rose-600 hover:bg-rose-700 transition duration-300 shadow-md">
+                                            Save Vitals
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Log Treatment Form -->
+                            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-6">Log Treatment / Notes</h3>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label for="log-type-hw" class="block text-sm font-medium text-gray-700 mb-1">Log Type</label>
+                                        <select id="log-type-hw" class="w-full p-3 border border-gray-300 rounded-lg">
+                                            <option>Medication Administered</option>
+                                            <option>Routine Check</option>
+                                            <option>Patient Note</option>
+                                            <option>Incident Report</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="log-notes-hw" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                                        <textarea id="log-notes-hw" rows="4" placeholder="e.g., Administered 10mg Lisinopril. Patient reports no dizziness..." class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
+                                    </div>
+                                    <button class="w-full py-3 px-6 rounded-xl text-white font-semibold bg-sky-600 hover:bg-sky-700 transition duration-300 shadow-md">
+                                        Add to Log
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 2: Historical Data -->
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Historical Health Data (Jane R.)</h3>
+                            
+                            <!-- Vitals History -->
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Recent Vitals</h4>
+                                <div class="space-y-3">
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <p class="font-semibold text-gray-800">Today, 10:00 AM</p>
+                                        <p class="text-sm text-gray-600">BP: 122/81, HR: 74, Temp: 98.7°F, O2: 98%, Resp: 16, Glucose: 98</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <p class="font-semibold text-gray-800">Today, 06:00 AM</p>
+                                        <p class="text-sm text-gray-600">BP: 120/80, HR: 72, Temp: 98.6°F, O2: 99%, Resp: 16, Glucose: 95</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <p class="font-semibold text-gray-800">Yesterday, 10:00 PM</p>
+                                        <p class="text-sm text-gray-600">BP: 124/82, HR: 75, Temp: 99.0°F, O2: 98%, Resp: 17, Glucose: 105</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- NEW: Vitals Trend Summary -->
+                            <hr class="my-6 border-gray-200">
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Vitals Trend (Last 24h)</h4>
+                                <div class="w-full h-48 bg-gray-100 rounded-xl flex items-center justify-center border border-gray-200">
+                                    <span class="text-gray-500 font-medium">Vitals Trend Chart Placeholder</span>
+                                </div>
+                            </div>
+
+                            <hr class="my-6 border-gray-200">
+
+                            <!-- Treatment Log -->
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Recent Treatment Log</h4>
+                                <div class="space-y-3">
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <p class="font-semibold text-gray-800">Today, 08:00 AM - <span class="text-blue-600">Medication</span></p>
+                                        <p class="text-sm text-gray-600">Administered 500mg Metformin.</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <p class="font-semibold text-gray-800">Today, 07:00 AM - <span class="text-purple-600">Note</span></p>
+                                        <p class="text-sm text-gray-600">Patient reports feeling well rested.</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                        <p class="font-semibold text-gray-800">Yesterday, 09:00 PM - <span class="text-blue-600">Medication</span></p>
+                                        <p class="text-sm text-gray-600">Administered 20mg Atorvastatin.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- NEW: Medication Schedule -->
+                            <hr class="my-6 border-gray-200">
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800 mb-3">Today's Medication Schedule</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                        <input type="checkbox" checked class="h-5 w-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 mr-3" disabled>
+                                        <span class="text-gray-800">08:00 AM - 500mg Metformin <span class="text-gray-500 line-through">(Done)</span></span>
+                                    </div>
+                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                        <input type="checkbox" class="h-5 w-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 mr-3">
+                                        <span class="text-gray-800">12:00 PM - 10mg Lisinopril <span class="text-amber-600 font-medium">(Due)</span></span>
+                                    </div>
+                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                        <input type="checkbox" class="h-5 w-5 text-sky-600 rounded border-gray-300 focus:ring-sky-500 mr-3">
+                                        <span class="text-gray-800">09:00 PM - 20mg Atorvastatin</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <script>
+        // --- Utility Functions ---
+
+        // Utility function to change the main header text
+        function updateHeader(title, subtitle) {
+            document.getElementById('main-title').textContent = title;
+            document.getElementById('main-subtitle').textContent = subtitle;
+        }
+
+        // Function to hide all dashboards and show the main role selection screen
+        function showRoleSelection() {
+            // Hide all dashboards
+            document.getElementById('hw-dashboard').classList.add('hidden');
+            document.getElementById('doctor-dashboard').classList.add('hidden');
+            document.getElementById('patient-dashboard').classList.add('hidden');
+            
+            // Show the role selection screen
+            document.getElementById('role-selection').classList.remove('hidden');
+
+            // Reset the main header text
+            updateHeader('MediCare Portal', 'Select your role to access the healthcare system');
+        }
+
+        // --- Patient Flow Functions ---
+
+        // Function to show the main Patient Dashboard options
+        function showPatientOptions() {
+            document.getElementById('patient-login-form').classList.add('hidden');
+            document.getElementById('patient-billing-details').classList.add('hidden');
+            document.getElementById('patient-hospital-info').classList.add('hidden');
+            document.getElementById('patient-main-dashboard').classList.add('hidden');
+            document.getElementById('patient-appointment-system').classList.add('hidden');
+            document.getElementById('patient-health-education').classList.add('hidden');
+            document.getElementById('patient-options').classList.remove('hidden');
+
+            // Update header for the dashboard
+            updateHeader('Welcome Back, Patient!', 'Your personalized health portal and information center.');
+        }
+        
+        // Step 1: Show the Patient Login Form
+        function showPatientLogin() {
+            // Hide all other screens
+            document.getElementById('role-selection').classList.add('hidden');
+            document.getElementById('doctor-dashboard').classList.add('hidden');
+            document.getElementById('hw-dashboard').classList.add('hidden');
+            
+            // Show the Patient wrapper and login form
+            document.getElementById('patient-dashboard').classList.remove('hidden');
+            document.getElementById('patient-login-form').classList.remove('hidden');
+            document.getElementById('patient-options').classList.add('hidden');
+            document.getElementById('patient-billing-details').classList.add('hidden');
+            document.getElementById('patient-hospital-info').classList.add('hidden');
+            document.getElementById('patient-main-dashboard').classList.add('hidden');
+            document.getElementById('patient-appointment-system').classList.add('hidden');
+            document.getElementById('patient-health-education').classList.add('hidden');
+            
+            // Clear any previous error messages
+            document.getElementById('patient-login-error').classList.add('hidden');
+
+            // Update the main header text
+            updateHeader('Patient Portal Login', 'Enter your credentials to access your health data.');
+        }
+
+        // Step 2: Handle Login Attempt (and simulated Google Login)
+        function handlePatientLogin(isGoogleLogin = false) {
+            const usernameInput = document.getElementById('patient-username').value.trim();
+            const passwordInput = document.getElementById('patient-password').value.trim();
+            const errorElement = document.getElementById('patient-login-error');
+
+            // Hardcoded credentials for simulation
+            const correctUsername = 'user';
+            const correctPassword = 'pass';
+
+            if (isGoogleLogin || (usernameInput === correctUsername && passwordInput === correctPassword)) {
+                // Successful Login: Show Dashboard Options
+                errorElement.classList.add('hidden');
+                showPatientOptions(); // Use the dedicated function for dashboard view
+            } else {
+                // Failed Login: Show error message
+                errorElement.classList.remove('hidden');
+            }
+        }
+        
+        // Function to show the Billing Details submenu
+        function showBillingDetails() {
+            document.getElementById('patient-options').classList.add('hidden');
+            document.getElementById('patient-billing-details').classList.remove('hidden');
+            document.getElementById('patient-main-dashboard').classList.add('hidden');
+            document.getElementById('patient-hospital-info').classList.add('hidden');
+            document.getElementById('patient-appointment-system').classList.add('hidden');
+            document.getElementById('patient-health-education').classList.add('hidden');
+
+            // Update header for the billing screen
+            updateHeader('Billing & Payments', 'Review invoices, access breakdowns, and submit payments.');
+        }
+
+
+        // Function to show the Hospital Info Details submenu
+        function showHospitalInfo() {
+            document.getElementById('patient-options').classList.add('hidden');
+            document.getElementById('patient-billing-details').classList.add('hidden');
+            document.getElementById('patient-hospital-info').classList.remove('hidden');
+            document.getElementById('patient-main-dashboard').classList.add('hidden');
+            document.getElementById('patient-appointment-system').classList.add('hidden');
+            document.getElementById('patient-health-education').classList.add('hidden');
+
+            // Update header for the hospital info screen
+            updateHeader('Hospital Information', 'Find directions, visiting hours, and nearby facilities.');
+        }
+
+
+        // Function to show the main Patient Health Dashboard
+        function showPatientMainDashboard() {
+            document.getElementById('patient-options').classList.add('hidden');
+            document.getElementById('patient-billing-details').classList.add('hidden');
+            document.getElementById('patient-hospital-info').classList.add('hidden');
+            document.getElementById('patient-main-dashboard').classList.remove('hidden');
+            document.getElementById('patient-appointment-system').classList.add('hidden');
+            document.getElementById('patient-health-education').classList.add('hidden');
+
+            // Update header for this screen
+            updateHeader('Your Health Dashboard', 'View your lab results, vitals, and medications.');
+        }
+
+
+        // Function to show the Appointment System
+        function showAppointmentSystem() {
+            document.getElementById('patient-options').classList.add('hidden');
+            document.getElementById('patient-billing-details').classList.add('hidden');
+            document.getElementById('patient-hospital-info').classList.add('hidden');
+            document.getElementById('patient-main-dashboard').classList.add('hidden');
+            document.getElementById('patient-appointment-system').classList.remove('hidden');
+            document.getElementById('patient-health-education').classList.add('hidden');
+
+            // Update header for this screen
+            updateHeader('Appointment System', 'Book, reschedule, or cancel your appointments.');
+        }
+
+
+        // Function to show the Health Education System
+        function showHealthEducation() {
+            document.getElementById('patient-options').classList.add('hidden');
+            document.getElementById('patient-billing-details').classList.add('hidden');
+            document.getElementById('patient-hospital-info').classList.add('hidden');
+            document.getElementById('patient-main-dashboard').classList.add('hidden');
+            document.getElementById('patient-appointment-system').classList.add('hidden');
+            document.getElementById('patient-health-education').classList.remove('hidden');
+
+            // Update header for this screen
+            updateHeader('Health Education', 'Access articles, videos, and guides related to your health.');
+        }
+
+
+        // --- Doctor Flow Functions ---
+
+        // Function to show Doctor Dashboard
+        function showDoctorDashboard() {
+            // Hide all other screens
+            document.getElementById('role-selection').classList.add('hidden');
+            document.getElementById('hw-dashboard').classList.add('hidden');
+            document.getElementById('patient-dashboard').classList.add('hidden');
+            
+            // Show the Doctor dashboard
+            document.getElementById('doctor-dashboard').classList.remove('hidden');
+
+            // Show the default doctor options screen
+            showDoctorOptions();
+        }
+
+        // Function: Shows the main Doctor options screen
+        function showDoctorOptions() {
+            document.getElementById('doctor-options').classList.remove('hidden');
+            document.getElementById('doctor-patient-info').classList.add('hidden');
+            document.getElementById('doctor-dashboard-overview').classList.add('hidden');
+            document.getElementById('doctor-appointment-queue').classList.add('hidden');
+            document.getElementById('doctor-comm-tools').classList.add('hidden');
+            
+            // Update the main header text
+            updateHeader('Doctor Dashboard', 'Manage patient care, prescriptions, and practice logistics.');
+        }
+
+        // Function: Shows the Doctor Patient Info sub-page
+        function showDoctorPatientInfo() {
+            document.getElementById('doctor-options').classList.add('hidden');
+            document.getElementById('doctor-patient-info').classList.remove('hidden');
+            document.getElementById('doctor-dashboard-overview').classList.add('hidden');
+            document.getElementById('doctor-appointment-queue').classList.add('hidden');
+            document.getElementById('doctor-comm-tools').classList.add('hidden');
+
+            // Update header for this screen
+            updateHeader('Patient Information', "View patient's complete medical file.");
+        }
+
+        // Function: Shows the Doctor Dashboard Overview sub-page
+        function showDoctorDashboardOverview() {
+            document.getElementById('doctor-options').classList.add('hidden');
+            document.getElementById('doctor-patient-info').classList.add('hidden');
+            document.getElementById('doctor-appointment-queue').classList.add('hidden');
+            document.getElementById('doctor-comm-tools').classList.add('hidden');
+            document.getElementById('doctor-dashboard-overview').classList.remove('hidden');
+
+            // Update header for this screen
+            updateHeader('Dashboard Overview', 'Real-time key performance indicators and facility metrics.');
+        }
+
+        // Function: Shows the Doctor Appointment Queue sub-page
+        function showDoctorApptQueue() {
+            document.getElementById('doctor-options').classList.add('hidden');
+            document.getElementById('doctor-patient-info').classList.add('hidden');
+            document.getElementById('doctor-dashboard-overview').classList.add('hidden');
+            document.getElementById('doctor-comm-tools').classList.add('hidden');
+            document.getElementById('doctor-appointment-queue').classList.remove('hidden');
+
+            // Update header for this screen
+            updateHeader('Appointments & Queue', 'Manage waiting lists, check-ins, and schedule conflicts.');
+        }
+
+        // NEW Function: Shows the Doctor Comm Tools sub-page
+        function showDoctorCommTools() {
+            document.getElementById('doctor-options').classList.add('hidden');
+            document.getElementById('doctor-patient-info').classList.add('hidden');
+            document.getElementById('doctor-dashboard-overview').classList.add('hidden');
+            document.getElementById('doctor-appointment-queue').classList.add('hidden');
+            document.getElementById('doctor-comm-tools').classList.remove('hidden');
+
+            // Update header for this screen
+            updateHeader('Communication Tools', 'Send prescriptions and consult with staff securely.');
+        }
+
+
+        // --- Healthcare Worker Flow Functions ---
+
+        // Function to show Healthcare Worker Dashboard
+        function showHealthcareWorkerDashboard() {
+            // Hide all other screens
+            document.getElementById('role-selection').classList.add('hidden');
+            document.getElementById('doctor-dashboard').classList.add('hidden');
+            document.getElementById('patient-dashboard').classList.add('hidden');
+            
+            // Show the HW dashboard
+            document.getElementById('hw-dashboard').classList.remove('hidden');
+
+            // Show the default HW options screen
+            showHealthcareWorkerOptions();
+        }
+
+        // Function: Shows the main HW options screen
+        function showHealthcareWorkerOptions() {
+            document.getElementById('hw-options').classList.remove('hidden');
+            document.getElementById('hw-navigation-details').classList.add('hidden');
+            document.getElementById('hw-comm-tools').classList.add('hidden');
+            document.getElementById('hw-appointment-mgmt').classList.add('hidden');
+            document.getElementById('hw-patient-monitoring').classList.add('hidden');
+            
+            // Update header for the main HW dashboard
+            updateHeader('Healthcare Worker Dashboard', 'Quick access to your coordination and patient care tools.');
+        }
+
+        // Function: Shows the HW Navigation sub-page
+        function showNavigationDetails() {
+            document.getElementById('hw-options').classList.add('hidden');
+            document.getElementById('hw-navigation-details').classList.remove('hidden');
+            document.getElementById('hw-comm-tools').classList.add('hidden');
+            document.getElementById('hw-appointment-mgmt').classList.add('hidden');
+            document.getElementById('hw-patient-monitoring').classList.add('hidden');
+
+            // Update header for this screen
+            updateHeader('Live Navigation', 'Real-time route and ambulance support.');
+        }
+
+        // Function: Shows the HW Communication Tools sub-page
+        function showHwCommTools() {
+            document.getElementById('hw-options').classList.add('hidden');
+            document.getElementById('hw-navigation-details').classList.add('hidden');
+            document.getElementById('hw-comm-tools').classList.remove('hidden');
+            document.getElementById('hw-appointment-mgmt').classList.add('hidden');
+            document.getElementById('hw-patient-monitoring').classList.add('hidden');
+
+            // Update header for this screen
+            updateHeader('Communication Tools', 'Securely message doctors, nurses, and patient families.');
+        }
+
+        // Function: Shows the HW Appointment Management sub-page
+        function showHwApptMgmt() {
+            document.getElementById('hw-options').classList.add('hidden');
+            document.getElementById('hw-navigation-details').classList.add('hidden');
+            document.getElementById('hw-comm-tools').classList.add('hidden');
+            document.getElementById('hw-appointment-mgmt').classList.remove('hidden');
+            document.getElementById('hw-patient-monitoring').classList.add('hidden');
+
+            // Update header for this screen
+            updateHeader('Appointment Management', 'Document patient visits and manage schedules.');
+        }
+
+        // NEW Function: Shows the HW Patient Monitoring sub-page
+        function showHwPatientMonitoring() {
+            document.getElementById('hw-options').classList.add('hidden');
+            document.getElementById('hw-navigation-details').classList.add('hidden');
+            document.getElementById('hw-comm-tools').classList.add('hidden');
+            document.getElementById('hw-appointment-mgmt').classList.add('hidden');
+            document.getElementById('hw-patient-monitoring').classList.remove('hidden');
+
+            // Update header for this screen
+            updateHeader('Patient Monitoring', 'Record vitals and log treatment data.');
+        }
+    </script>
+     <script>
+  fetch("http://localhost:5000/api/test")
+    .then(res => res.json())
+    .then(data => console.log("Response from backend:", data))
+    .catch(err => console.error("Error:", err));
+</script>
+</body>
+</html>
